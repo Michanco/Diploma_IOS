@@ -33,7 +33,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         starfield.zPosition = -1 // задаём позицию фона по оси Z, отодвигаем фон на задний план
         
         player = SKSpriteNode(imageNamed: "shuttle") //кладём в переменную изображения корабля игрока
-        player.position = CGPoint(x: 0, y: -400) //задаём позицию начально положения игрока
+        player.position = CGPoint(x: 0, y: -400) //задаём позицию начального положения игрока
+        player.setScale(1.5)
         
         self.addChild(player) // добавляем игрока на экран
         
@@ -47,18 +48,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         scoreLable.position = CGPoint(x: self.frame.midX - 150, y: self.frame.maxY  - 150) // задаём положение на экране
         
         self.addChild(scoreLable) //добавляем поле со счётом на экран
-        gameTimer = Timer.scheduledTimer(timeInterval: 0.75, target: self, selector: #selector(addAlien), userInfo: nil, repeats: true) //инициализируем переменную
+        gameTimer = Timer.scheduledTimer(timeInterval: 1.5, target: self, selector: #selector(addAlien), userInfo: nil, repeats: true) //инициализируем переменную
         
     }
     
     @objc func addAlien(){     // описываем функцию создания врага
         aliens = GKRandomSource.sharedRandom().arrayByShufflingObjects(in: aliens) as! [String] // задаём случайный порядок элементов в массиве
-        let alien = SKSpriteNode(imageNamed:  aliens[0]) // создаём изображение врага, передаём случайное имя изображения
-        let randomPos = GKRandomDistribution(lowestValue: 13 , highestValue: 380) // создаём рандом для X позиции врага
+        let alien = SKSpriteNode(imageNamed:  aliens[0]) // создаём врага, передаём случайное имя изображения
+        let randomPos = GKRandomDistribution(lowestValue: Int(self.frame.minX + alien.size.width * 2),
+                                             highestValue: Int(self.frame.maxX - alien.size.width * 2)) // создаём рандом для X позиции врага
         let pos = CGFloat(randomPos.nextInt()) // конвертируем рандом
-        alien.position = CGPoint (x: pos, y: self.frame.maxY) // задаём координаты появления врага
+        alien.position = CGPoint (x: pos, y: self.frame.maxY + alien.size.height) // задаём координаты появления врага
+        alien.setScale(1.5 )
         
-        alien.physicsBody = SKPhysicsBody(rectangleOf: alien.size) //задаём границы взаимодействия объекта врага
+        alien.physicsBody = SKPhysicsBody(rectangleOf: alien.size) //задаём границы взаимодействия с объектом врага
         alien.physicsBody?.isDynamic = true //задаём возможность взаимодействия
         
         alien.physicsBody?.categoryBitMask = alienCategory  // прописываем параметры проверки взаимодействий
@@ -67,9 +70,44 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.addChild(alien) //добавляем врага на экран
         
-        let animDuration = 6
+        let animDuration:TimeInterval = 6 // задаём скорость движения врагов
         
-        var actions = [SKAction]()
+        var actions = [SKAction]() // задаём "набор" активности
+        actions.append(SKAction.move(to: CGPoint(x: pos, y: self.frame.minY - alien.size.height), duration: animDuration)) //задаём параметр движения врага
+        actions.append(SKAction.removeFromParent()) // задаём удаление врага при прохождении экрана
+        
+        alien.run(SKAction.sequence(actions))
+        
+    }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) { // задаём выстрел по нажатию на экране
+        fireBullet()
+    }
+    
+    func fireBullet(){
+        self.run(SKAction.playSoundFileNamed("bullet", waitForCompletion: false )) //  проигрывем звук выстрела
+        let bullet = SKSpriteNode(imageNamed: "torpedo")
+        bullet.position = player.position
+        bullet.position.y += player.size.height/2
+        bullet.setScale(2)
+
+        bullet.physicsBody = SKPhysicsBody(circleOfRadius: bullet.size.width / 2) //задаём границы взаимодействия объекта выстрел
+        bullet.physicsBody?.isDynamic = true //задаём возможность взаимодействия
+        
+        bullet.physicsBody?.categoryBitMask = bulletCategory  // прописываем параметры проверки взаимодействий
+        bullet.physicsBody?.contactTestBitMask = alienCategory
+        bullet.physicsBody?.collisionBitMask = 0
+        bullet.physicsBody?.usesPreciseCollisionDetection = true
+        
+        self.addChild(bullet) //добавляем выстрел на экран
+        
+        let animDuration:TimeInterval = 1 // задаём скорость движения врагов
+        
+        var actions = [SKAction]() // задаём "набор" активности
+        actions.append(SKAction.move(to: CGPoint(x: player.position.x, y: self.frame.maxY + bullet.size.height), duration: animDuration)) //задаём параметр движения врага
+        actions.append(SKAction.removeFromParent()) // задаём удаление врага при прохождении экрана
+        
+        bullet.run(SKAction.sequence(actions))
         
     }
     
