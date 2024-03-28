@@ -7,6 +7,7 @@
 
 import SpriteKit
 import GameplayKit
+import CoreMotion
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     
@@ -23,6 +24,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     let alienCategory:UInt32 = 0x1 << 1                         // создаём уникальные идентификаторы
     let bulletCategory:UInt32 = 0x1 << 0
+    
+    let motionManager = CMMotionManager()
+    var xAccelerate: CGFloat = 0
     
     override func didMove(to view: SKView) {
         starfield = SKEmitterNode(fileNamed: "Starfield")       //кладём в переменную анимацию фона
@@ -51,7 +55,64 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         gameTimer = Timer.scheduledTimer(timeInterval: 1.5, target: self, selector: #selector(addAlien), userInfo: nil, repeats: true)                                                             //инициализируем переменную
         
+        motionManager.accelerometerUpdateInterval = 0.2
+        motionManager.startAccelerometerUpdates(to: OperationQueue.current!)                        // получаем данные от акселлерометра
+        { (data: CMAccelerometerData?, error: Error?) in
+            if let accelerometrData = data {
+                let acceleration = accelerometrData.acceleration
+                self.xAccelerate =  CGFloat(acceleration.x) * 0.75 + self.xAccelerate * 0.25
+            }
+            
+        }
+        
     }
+    
+    override func didSimulatePhysics() {
+        player.position.x += xAccelerate * 50                //изменяем положение игрока на значение полученное от акселерометра
+        
+        if player.position.x < self.frame.minX - player.size.width {
+            player.position.x = self.frame.maxX + player.size.width
+        } else if player.position.x > self.frame.maxX + player.size.width {
+            player.position.x = self.frame.minX - player.size.width
+        }
+    }
+    
+    func didBegin(_ contact: SKPhysicsContact) {
+        var alienBody:SKPhysicsBody
+        var bulletBody:SKPhysicsBody
+        
+        if contact.bodyA.categoryBitMask < contact.bodyB.categoryBitMask {                  // проверяем который из объектов враг а который выстрел
+            bulletBody = contact.bodyA
+            alienBody = contact.bodyB
+        } else {
+            bulletBody = contact.bodyB
+            alienBody = contact.bodyA
+        }
+        
+        if (alienBody.categoryBitMask & alienCategory) != 0 && (bulletBody.categoryBitMask & bulletCategory) != 0 {        // проверяем что соприкасаются именно объекты враг и выстрел
+            collisionElements(bulletNode: bulletBody.node as! SKSpriteNode, alienNode: alienBody.node as! SKSpriteNode)
+        }
+        
+        func collisionElements (bulletNode: SKSpriteNode, alienNode: SKSpriteNode){
+            let explosion = SKEmitterNode(fileNamed: "Vzriv")   // кладём в переменную анимацию взрыва
+            explosion?.position = alienNode.position            // задаём позицию
+            self.addChild(explosion!)                           // длбавляем взрыв на сцену
+            
+            self.run(SKAction.playSoundFileNamed("vzriv", waitForCompletion: false))   // проигрываем звук взрыва
+            
+            bulletNode.removeFromParent()        // удаляем со сцены объект выстрел
+            alienNode.removeFromParent()         // удаляем со сцены объект враг
+            
+            self.run(SKAction.wait(forDuration: 2)) {   //удаляем со сцены анимацию с задержкой 2 сек
+                explosion?.removeFromParent()
+            }
+            
+            score += 1
+            
+        }
+    }
+    
+    
     
     @objc func addAlien(){                                       // описываем функцию создания врага
         aliens = GKRandomSource.sharedRandom().arrayByShufflingObjects(in: aliens) as! [String]             // задаём случайный порядок элементов в массиве
@@ -81,7 +142,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) { // задаём выстрел по нажатию на экране
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {    // задаём выстрел по нажатию на экране
         fireBullet()
     }
     
@@ -92,24 +153,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         bullet.position.y += player.size.height/2
         bullet.setScale(2)
 
-        bullet.physicsBody = SKPhysicsBody(circleOfRadius: bullet.size.width / 2) //задаём границы взаимодействия объекта выстрел
-        bullet.physicsBody?.isDynamic = true //задаём возможность взаимодействия
-        
-        bullet.physicsBody?.categoryBitMask = bulletCategory  // прописываем параметры проверки взаимодействий
+        bullet.physicsBody = SKPhysicsBody(circleOfRadius: bullet.size.width / 2)           //задаём границы взаимодействия объекта выстрел
+        bullet.physicsBody?.isDynamic = true                                                //задаём возможность взаимодействия
+        bullet.physicsBody?.categoryBitMask = bulletCategory                                // прописываем параметры проверки взаимодействий
         bullet.physicsBody?.contactTestBitMask = alienCategory
         bullet.physicsBody?.collisionBitMask = 0
         bullet.physicsBody?.usesPreciseCollisionDetection = true
         
-        self.addChild(bullet) //добавляем выстрел на экран
-        
-        let animDuration:TimeInterval = 1 // задаём скорость движения врагов
-        
-        var actions = [SKAction]() // задаём "набор" активности
-        actions.append(SKAction.move(to: CGPoint(x: player.position.x, y: self.frame.maxY + bullet.size.height), duration: animDuration)) //задаём параметр движения выстрела
-        actions.append(SKAction.removeFromParent()) // задаём удаление выстрела при прохождении экрана
+        self.addChild(bullet)                                                                                           //добавляем выстрел на экран
+        let animDuration:TimeInterval = 1                                                                               // задаём скорость движения врагов
+        var actions = [SKAction]()                                                                                      // задаём "набор" активности
+        actions.append(SKAction.move(to: CGPoint(x: player.position.x,
+                       y: self.frame.maxY + bullet.size.height), duration: animDuration))                               //задаём параметр движения выстрела
+        actions.append(SKAction.removeFromParent())                                                                     // задаём удаление выстрела при прохождении экрана
         
         bullet.run(SKAction.sequence(actions))
         
+      
     }
     
     override func update(_ currentTime: TimeInterval) {

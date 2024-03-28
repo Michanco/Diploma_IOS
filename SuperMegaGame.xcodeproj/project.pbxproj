@@ -21,6 +21,8 @@
 		8D01EC512BAD5D950000783B /* vzriv.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8D01EC502BAD5D950000783B /* vzriv.mp3 */; };
 		8D01EC552BAD5FD20000783B /* Starfield.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8D01EC542BAD5FD20000783B /* Starfield.sks */; };
 		8D01EC572BAD5FE40000783B /* Vzriv.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8D01EC562BAD5FE40000783B /* Vzriv.sks */; };
+		8D5EE53D2BB5482D0083AD7C /* MainMenu.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8D5EE53B2BB5482D0083AD7C /* MainMenu.sks */; };
+		8D5EE53F2BB552960083AD7C /* MainMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D5EE53E2BB552960083AD7C /* MainMenu.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +60,8 @@
 		8D01EC502BAD5D950000783B /* vzriv.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = vzriv.mp3; sourceTree = "<group>"; };
 		8D01EC542BAD5FD20000783B /* Starfield.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Starfield.sks; sourceTree = "<group>"; };
 		8D01EC562BAD5FE40000783B /* Vzriv.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Vzriv.sks; sourceTree = "<group>"; };
+		8D5EE53C2BB5482D0083AD7C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = Base; path = Base.lproj/MainMenu.sks; sourceTree = "<group>"; };
+		8D5EE53E2BB552960083AD7C /* MainMenu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MainMenu.swift; path = Assets.xcassets/MainMenu.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +115,8 @@
 				8D01EC1D2BAD56CC0000783B /* GameScene.sks */,
 				8D01EC1F2BAD56CC0000783B /* Actions.sks */,
 				8D01EC212BAD56CC0000783B /* GameScene.swift */,
+				8D5EE53B2BB5482D0083AD7C /* MainMenu.sks */,
+				8D5EE53E2BB552960083AD7C /* MainMenu.swift */,
 				8D01EC232BAD56CC0000783B /* GameViewController.swift */,
 				8D01EC252BAD56CC0000783B /* Main.storyboard */,
 				8D01EC282BAD56D90000783B /* Assets.xcassets */,
@@ -239,6 +245,7 @@
 				8D01EC272BAD56CC0000783B /* Main.storyboard in Resources */,
 				8D01EC1E2BAD56CC0000783B /* GameScene.sks in Resources */,
 				8D01EC552BAD5FD20000783B /* Starfield.sks in Resources */,
+				8D5EE53D2BB5482D0083AD7C /* MainMenu.sks in Resources */,
 				8D01EC512BAD5D950000783B /* vzriv.mp3 in Resources */,
 				8D01EC572BAD5FE40000783B /* Vzriv.sks in Resources */,
 				8D01EC292BAD56D90000783B /* Assets.xcassets in Resources */,
@@ -272,6 +279,7 @@
 				8D01EC222BAD56CC0000783B /* GameScene.swift in Sources */,
 				8D01EC242BAD56CC0000783B /* GameViewController.swift in Sources */,
 				8D01EC1C2BAD56CC0000783B /* AppDelegate.swift in Sources */,
+				8D5EE53F2BB552960083AD7C /* MainMenu.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -321,6 +329,14 @@
 				8D01EC2B2BAD56D90000783B /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		8D5EE53B2BB5482D0083AD7C /* MainMenu.sks */ = {
+			isa = PBXVariantGroup;
+			children = (
+				8D5EE53C2BB5482D0083AD7C /* Base */,
+			);
+			name = MainMenu.sks;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
@@ -452,6 +468,8 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = SuperMegaGame;
+				DEVELOPMENT_TEAM = LHF6S8DQP3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -479,6 +497,8 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = SuperMegaGame;
+				DEVELOPMENT_TEAM = LHF6S8DQP3;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
