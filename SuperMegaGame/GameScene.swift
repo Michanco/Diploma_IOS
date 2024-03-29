@@ -85,7 +85,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if player.position.x < 0 - player.size.width / 2 {
             player.position.x = UIScreen.main.bounds.width + player.size.width / 2
         } else if player.position.x > UIScreen.main.bounds.width + player.size.width / 2{
-            player.position.x = 0 - player.size.width
+            player.position.x = 0 - player.size.width / 2
         }
     }
     

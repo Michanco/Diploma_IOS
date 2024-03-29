@@ -15,8 +15,6 @@
 		8D01EC272BAD56CC0000783B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8D01EC252BAD56CC0000783B /* Main.storyboard */; };
 		8D01EC292BAD56D90000783B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8D01EC282BAD56D90000783B /* Assets.xcassets */; };
 		8D01EC2C2BAD56D90000783B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8D01EC2A2BAD56D90000783B /* LaunchScreen.storyboard */; };
-		8D01EC402BAD56D90000783B /* SuperMegaGameUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D01EC3F2BAD56D90000783B /* SuperMegaGameUITests.swift */; };
-		8D01EC422BAD56D90000783B /* SuperMegaGameUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D01EC412BAD56D90000783B /* SuperMegaGameUITestsLaunchTests.swift */; };
 		8D01EC4F2BAD5D830000783B /* bullet.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8D01EC4E2BAD5D830000783B /* bullet.mp3 */; };
 		8D01EC512BAD5D950000783B /* vzriv.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 8D01EC502BAD5D950000783B /* vzriv.mp3 */; };
 		8D01EC552BAD5FD20000783B /* Starfield.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8D01EC542BAD5FD20000783B /* Starfield.sks */; };
@@ -54,8 +52,6 @@
 		8D01EC2B2BAD56D90000783B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		8D01EC312BAD56D90000783B /* SuperMegaGameTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SuperMegaGameTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8D01EC3B2BAD56D90000783B /* SuperMegaGameUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SuperMegaGameUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		8D01EC3F2BAD56D90000783B /* SuperMegaGameUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperMegaGameUITests.swift; sourceTree = "<group>"; };
-		8D01EC412BAD56D90000783B /* SuperMegaGameUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuperMegaGameUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		8D01EC4E2BAD5D830000783B /* bullet.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bullet.mp3; sourceTree = "<group>"; };
 		8D01EC502BAD5D950000783B /* vzriv.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = vzriv.mp3; sourceTree = "<group>"; };
 		8D01EC542BAD5FD20000783B /* Starfield.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Starfield.sks; sourceTree = "<group>"; };
@@ -93,7 +89,6 @@
 			isa = PBXGroup;
 			children = (
 				8D01EC1A2BAD56CC0000783B /* SuperMegaGame */,
-				8D01EC3E2BAD56D90000783B /* SuperMegaGameUITests */,
 				8D01EC192BAD56CC0000783B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -127,15 +122,6 @@
 				8D01EC562BAD5FE40000783B /* Vzriv.sks */,
 			);
 			path = SuperMegaGame;
-			sourceTree = "<group>";
-		};
-		8D01EC3E2BAD56D90000783B /* SuperMegaGameUITests */ = {
-			isa = PBXGroup;
-			children = (
-				8D01EC3F2BAD56D90000783B /* SuperMegaGameUITests.swift */,
-				8D01EC412BAD56D90000783B /* SuperMegaGameUITestsLaunchTests.swift */,
-			);
-			path = SuperMegaGameUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -294,8 +280,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8D01EC422BAD56D90000783B /* SuperMegaGameUITestsLaunchTests.swift in Sources */,
-				8D01EC402BAD56D90000783B /* SuperMegaGameUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
