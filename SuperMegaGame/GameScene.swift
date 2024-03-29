@@ -37,8 +37,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         starfield.zPosition = -1                                // задаём позицию фона по оси Z, отодвигаем фон на задний план
         
         player = SKSpriteNode(imageNamed: "shuttle")            //кладём в переменную изображения корабля игрока
-        player.position = CGPoint(x: 0, y: -400)                //задаём позицию начального положения игрока
-        player.setScale(1.5)
+        player.position = CGPoint(x: UIScreen.main.bounds.width / 2, y: 40)                //задаём позицию начального положения игрока
+        //player.setScale(1.5)
         
         self.addChild(player)                                   // добавляем игрока на экран
         
@@ -47,9 +47,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         scoreLable = SKLabelNode (text: " Score: 0")                                        // задаём начальное значение поля со счётом
         scoreLable.fontName = "AmericanTypewriter-Bold"                                     // задаём параметры текста
-        scoreLable.fontSize = 56
+        scoreLable.fontSize = 36
         scoreLable.fontColor = UIColor.white
-        scoreLable.position = CGPoint(x: self.frame.midX - 150, y: self.frame.maxY  - 150)  // задаём положение на экране
+        scoreLable.position = CGPoint(x: self.frame.midX - 100, y: self.frame.maxY  - 100)  // задаём положение на экране
         
         self.addChild(scoreLable)                                                           //добавляем поле со счётом на экран
         
@@ -70,10 +70,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     override func didSimulatePhysics() {
         player.position.x += xAccelerate * 50                //изменяем положение игрока на значение полученное от акселерометра
         
-        if player.position.x < self.frame.minX - player.size.width {
-            player.position.x = self.frame.maxX + player.size.width
-        } else if player.position.x > self.frame.maxX + player.size.width {
-            player.position.x = self.frame.minX - player.size.width
+        if player.position.x < 0 - player.size.width / 2 {
+            player.position.x = UIScreen.main.bounds.width + player.size.width / 2
+        } else if player.position.x > UIScreen.main.bounds.width + player.size.width / 2{
+            player.position.x = 0 - player.size.width
         }
     }
     
@@ -117,11 +117,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     @objc func addAlien(){                                       // описываем функцию создания врага
         aliens = GKRandomSource.sharedRandom().arrayByShufflingObjects(in: aliens) as! [String]             // задаём случайный порядок элементов в массиве
         let alien = SKSpriteNode(imageNamed:  aliens[0])                                                    // создаём врага, передаём случайное имя изображения
-        let randomPos = GKRandomDistribution(lowestValue: Int(self.frame.minX + alien.size.width * 2),
-                                             highestValue: Int(self.frame.maxX - alien.size.width * 2))     // задаём интервал для рандома
+        let randomPos = GKRandomDistribution(lowestValue: Int(0 + alien.size.width * 2),
+                                             highestValue: Int(UIScreen.main.bounds.width - alien.size.width * 2))     // задаём интервал для рандома
         let pos = CGFloat(randomPos.nextInt())                                                              // создаём рандом для X позиции врага
-        alien.position = CGPoint (x: pos, y: self.frame.maxY + alien.size.height)                           // задаём координаты появления врага
-        alien.setScale(1.5 )
+        alien.position = CGPoint (x: pos, y: UIScreen.main.bounds.height + alien.size.height)                           // задаём координаты появления врага
+        //alien.setScale(1.5 )
         
         alien.physicsBody = SKPhysicsBody(rectangleOf: alien.size)                                          //задаём границы взаимодействия с объектом врага
         alien.physicsBody?.isDynamic = true                                                                 //задаём возможность взаимодействия
@@ -134,7 +134,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let animDuration:TimeInterval = 6                                                                                       // задаём скорость движения врагов
         
         var actions = [SKAction]()                                                                                              // задаём массив активностей
-        actions.append(SKAction.move(to: CGPoint(x: pos, y: self.frame.minY - alien.size.height),
+        actions.append(SKAction.move(to: CGPoint(x: pos, y: 0 - alien.size.height),
                                      duration: animDuration))                                                                   // задаём параметры движения врага
         actions.append(SKAction.removeFromParent())                                                                             // задаём удаление врага при выходе за пределы экрана
         
@@ -151,7 +151,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let bullet = SKSpriteNode(imageNamed: "torpedo")
         bullet.position = player.position
         bullet.position.y += player.size.height/2
-        bullet.setScale(2)
+        //bullet.setScale(2)
 
         bullet.physicsBody = SKPhysicsBody(circleOfRadius: bullet.size.width / 2)           //задаём границы взаимодействия объекта выстрел
         bullet.physicsBody?.isDynamic = true                                                //задаём возможность взаимодействия
@@ -164,7 +164,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let animDuration:TimeInterval = 1                                                                               // задаём скорость движения врагов
         var actions = [SKAction]()                                                                                      // задаём "набор" активности
         actions.append(SKAction.move(to: CGPoint(x: player.position.x,
-                       y: self.frame.maxY + bullet.size.height), duration: animDuration))                               //задаём параметр движения выстрела
+                                                 y: UIScreen.main.bounds.size.height + bullet.size.height), duration: animDuration))                               //задаём параметр движения выстрела
         actions.append(SKAction.removeFromParent())                                                                     // задаём удаление выстрела при прохождении экрана
         
         bullet.run(SKAction.sequence(actions))
