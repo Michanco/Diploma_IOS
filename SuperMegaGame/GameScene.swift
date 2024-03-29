@@ -19,6 +19,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             scoreLable.text = " Score: \(score)"                // Прописываем отображение изменения счёта
         }
     }
+    
+    
     var gameTimer: Timer!                                       // создаём переменную отвечающую за интервал появления врагов
     var aliens = ["alien", "alien2", "alien3"]                  // создаём массив с именами изображений врагов
     
@@ -28,7 +30,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let motionManager = CMMotionManager()
     var xAccelerate: CGFloat = 0
     
+    
+    
     override func didMove(to view: SKView) {
+        
+        
         starfield = SKEmitterNode(fileNamed: "Starfield")       //кладём в переменную анимацию фона
         starfield.position = CGPoint(x: 0, y: 1472)             // указываем координаты положения фона на экране
         starfield.advanceSimulationTime(10)                     // задаём сколько секунд с начала анимации пропустить
@@ -37,7 +43,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         starfield.zPosition = -1                                // задаём позицию фона по оси Z, отодвигаем фон на задний план
         
         player = SKSpriteNode(imageNamed: "shuttle")            //кладём в переменную изображения корабля игрока
-        player.position = CGPoint(x: UIScreen.main.bounds.width / 2, y: 40)                //задаём позицию начального положения игрока
+        player.position = CGPoint(x: UIScreen.main.bounds.width / 2, y: 100)                //задаём позицию начального положения игрока
         //player.setScale(1.5)
         
         self.addChild(player)                                   // добавляем игрока на экран
@@ -53,7 +59,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.addChild(scoreLable)                                                           //добавляем поле со счётом на экран
         
-        gameTimer = Timer.scheduledTimer(timeInterval: 1.5, target: self, selector: #selector(addAlien), userInfo: nil, repeats: true)                                                             //инициализируем переменную
+        var timeInterval = 1.5
+        
+        if UserDefaults.standard.bool(forKey: "hard"){
+            timeInterval = 0.7
+        }
+        gameTimer = Timer.scheduledTimer(timeInterval: timeInterval, target: self,
+                                         selector: #selector(addAlien), userInfo: nil, repeats: true)                                               //инициализируем переменную
         
         motionManager.accelerometerUpdateInterval = 0.2
         motionManager.startAccelerometerUpdates(to: OperationQueue.current!)                        // получаем данные от акселлерометра
@@ -68,7 +80,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func didSimulatePhysics() {
-        player.position.x += xAccelerate * 50                //изменяем положение игрока на значение полученное от акселерометра
+        player.position.x += xAccelerate * 20                //изменяем положение игрока на значение полученное от акселерометра
         
         if player.position.x < 0 - player.size.width / 2 {
             player.position.x = UIScreen.main.bounds.width + player.size.width / 2
@@ -117,8 +129,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     @objc func addAlien(){                                       // описываем функцию создания врага
         aliens = GKRandomSource.sharedRandom().arrayByShufflingObjects(in: aliens) as! [String]             // задаём случайный порядок элементов в массиве
         let alien = SKSpriteNode(imageNamed:  aliens[0])                                                    // создаём врага, передаём случайное имя изображения
-        let randomPos = GKRandomDistribution(lowestValue: Int(0 + alien.size.width * 2),
-                                             highestValue: Int(UIScreen.main.bounds.width - alien.size.width * 2))     // задаём интервал для рандома
+        let randomPos = GKRandomDistribution(lowestValue: Int(0 + alien.size.width / 2),
+                                             highestValue: Int(UIScreen.main.bounds.width - alien.size.width / 2))     // задаём интервал для рандома
         let pos = CGFloat(randomPos.nextInt())                                                              // создаём рандом для X позиции врага
         alien.position = CGPoint (x: pos, y: UIScreen.main.bounds.height + alien.size.height)                           // задаём координаты появления врага
         //alien.setScale(1.5 )
@@ -131,7 +143,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         self.addChild(alien)                                                                                                    //добавляем врага на сцену
         
-        let animDuration:TimeInterval = 6                                                                                       // задаём скорость движения врагов
+        var animDuration:TimeInterval = 6                                                                                       // задаём скорость движения врагов
+        
+        if UserDefaults.standard.bool(forKey: "hard"){
+            animDuration = 4
+        }
         
         var actions = [SKAction]()                                                                                              // задаём массив активностей
         actions.append(SKAction.move(to: CGPoint(x: pos, y: 0 - alien.size.height),

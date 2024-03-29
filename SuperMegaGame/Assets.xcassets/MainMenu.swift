@@ -27,6 +27,14 @@ class MainMenu: SKScene {
         newGameBtnNode.texture = SKTexture(imageNamed: "Start")
         levelBtnNode.texture = SKTexture(imageNamed: "Level")
         
+        let userLevel = UserDefaults.standard
+        
+        if userLevel.bool(forKey: "hard") {
+            levelLabelNode.text = "Hard"
+        } else {
+            levelLabelNode.text = "Easy"
+        }
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -39,14 +47,24 @@ class MainMenu: SKScene {
                 let transition = SKTransition.flipVertical(withDuration: 0.5)
                 let gameScene = GameScene(size: UIScreen.main.bounds.size)
                 self.view?.presentScene(gameScene, transition: transition)
-            } else if nodesArray.first?.name == "newGameBtn" {
+            } else if nodesArray.first?.name == "LevelBtn" {
                 changeLevel()
             }
         }
     }
     
-    func changeLevel(){
+    func changeLevel() {
+        let userLevel = UserDefaults.standard
         
+        if levelLabelNode.text == "Easy"{
+            levelLabelNode.text = "Hard"
+            userLevel.setValue(true, forKey: "hard")
+        } else {
+            levelLabelNode.text = "Easy"
+            userLevel.setValue(false, forKey: "hard")
+        }
+        
+        userLevel.synchronize()
     }
 
 }
